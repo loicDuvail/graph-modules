@@ -46,7 +46,7 @@ class MathCanvas extends Canvas {
     this.optionalTxtContainer.style.top = "0";
     this.optionalTxtContainer.style.left = "0";
     this.optionalTxtContainer.id = `container-for_${this.canvas.id}`;
-    document.body.appendChild(this.optionalTxtContainer);
+    this.parent.appendChild(this.optionalTxtContainer);
   }
 
   /**
@@ -178,7 +178,6 @@ class MathCanvas extends Canvas {
    * @param {Number} y
    * @param [options] options for text style as well as possibility to
    * forcefully set the text in bound if coordinates out of canvas boundaries
-   * @param {Number} [maxWidth]
    */
   fillText(
     txt,
@@ -192,8 +191,7 @@ class MathCanvas extends Canvas {
       stayInbound: true,
       inBoundedColor: "grey",
       renderOutsideBorderIfOutOfBound: false,
-    },
-    maxWidth
+    }
   ) {
     if (typeof txt != "string")
       throw new Error('"txt" parameter must be of type "string"');
@@ -218,51 +216,31 @@ class MathCanvas extends Canvas {
       let marginFromBorder = 10;
       let marginFromBottomBorder = 5;
 
-      if (x < marginFromBorder || x > w || y < marginFromBorder || y > h) {
-        c.fillStyle = options.inBoundedColor;
-        if (options.renderOutsideBorderIfOutOfBound) {
-          if (x < marginFromBorder) {
-            x = -marginFromBorder;
-            options.textAlign = "right";
-          }
-          if (x > w) {
-            x = w + marginFromBorder;
-            options.textAlign = "left";
-          }
-          if (y < 0) {
-            y = -marginFromBorder;
-            options.textBaseline = "bottom";
-          }
-          if (y > h) {
-            y = h + marginFromBottomBorder;
-            options.textBaseline = "top";
-          }
-          return this.htmlTxt(txt, x, y, { ...options, font: "Poppins" });
-        }
-      }
+      if (x < marginFromBorder || x > w || y < marginFromBorder || y > h)
+        options.color = options.inBoundedColor;
 
       if (x < marginFromBorder) {
         x = marginFromBorder;
-        c.textAlign = "left";
+        options.textAlign = "left";
       }
       if (x > w) {
         x = w - marginFromBorder;
-        c.textAlign = "right";
+        options.textAlign = "right";
       }
       if (y < marginFromBorder) {
         y = marginFromBorder;
-        c.textBaseline = "top";
+        options.textBaseline = "top";
       }
       if (y > h - marginFromBottomBorder) {
         y = h - marginFromBottomBorder;
-        c.textBaseline = "bottom";
+        options.textBaseline = "bottom";
       }
     }
 
-    c.fillText(txt, x, y, maxWidth);
+    this.#htmlTxt(txt, x, y, options);
   }
 
-  htmlTxt(
+  #htmlTxt(
     txt,
     x,
     y,
@@ -274,15 +252,17 @@ class MathCanvas extends Canvas {
     }
   ) {
     let txtContainer = document.createElement("div");
+    txtContainer.className = "grid-value unselectable";
+    // for internet explorer
+    txtContainer.unselectable = "on";
     txtContainer.innerText = txt;
 
     txtContainer.style.color = options.color || "black";
     txtContainer.style.fontFamily = options.font || "Arial";
     txtContainer.style.position = "absolute";
 
-    let br = this.parent.getBoundingClientRect();
-    txtContainer.style.top = y + br.y + "px";
-    txtContainer.style.left = x + br.x + "px";
+    txtContainer.style.top = y + "px";
+    txtContainer.style.left = x + "px";
 
     let xTranslate = "0",
       yTranslate = "0";

@@ -1,17 +1,30 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap');
 
 body{
-    margin: 0;
     height: 100vh;
+    margin: 0;
+    display: flex;
     font-family: "Poppins";
 }
 #parent{
-    height: calc(50% - 5px);
-    width: 50%;
+    height: calc(90% - 5px);
+    width: 100%;
     margin: 50px;
     position: relative;
     padding: 0;
     border: 1px solid rgba(65, 65, 65, 0.267);
     border-radius: 10px;
     overflow: hidden;
+}
+
+.unselectable{
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -khtml-user-select:none;
+    -o-user-select:none
+}
+.grid-value{
+    text-shadow: 1px 0 0 white, -1px 0 0 white,0 1px 0 white,0 -1px 0 white;
+    z-index: 1;
 }

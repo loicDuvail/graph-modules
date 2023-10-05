@@ -3,6 +3,7 @@ const defaultGridCanvasOptions = {
   grid: {
     square: true,
     axis: {
+      displayed: true,
       x: {
         lineColor: "#222",
         lineWidth: 1,
@@ -13,6 +14,7 @@ const defaultGridCanvasOptions = {
       },
     },
     gridLines: {
+      displayed: true,
       horiz: {
         lineColor: "grey",
         lineWidth: 0.5,
@@ -39,9 +41,6 @@ const defaultGridCanvasOptions = {
     },
     fontOptions: {
       fontStyle: "15px Arial",
-    },
-    gridNumbers: {
-      renderOutsideBorderIfOutOfBound: true,
     },
   },
 };
@@ -321,8 +320,6 @@ class GridCanvas extends MathCanvas {
             font: this.options.grid.fontOptions.fontStyle,
             stayInbound: true,
             inBoundedColor: "grey",
-            renderOutsideBorderIfOutOfBound:
-              this.options.grid.gridNumbers.renderOutsideBorderIfOutOfBound,
           }
         );
       }
@@ -339,13 +336,11 @@ class GridCanvas extends MathCanvas {
             font: this.options.grid.fontOptions.fontStyle,
             stayInbound: true,
             inBoundedColor: "grey",
-            renderOutsideBorderIfOutOfBound:
-              this.options.grid.gridNumbers.renderOutsideBorderIfOutOfBound,
           }
         );
       }
 
-    this.fillText("0", -yAxisTxtMarginRight, -xAxisTxtMarginTop, {
+    this.fillText("0", -xAxisTxtMarginTop, -yAxisTxtMarginRight, {
       textAlign: "right",
       textBaseline: "top",
       font: this.options.grid.fontOptions.fontStyle,
