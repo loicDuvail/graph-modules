@@ -340,11 +340,16 @@ class GridCanvas extends MathCanvas {
         );
       }
 
-    this.fillText("0", -xAxisTxtMarginTop, -yAxisTxtMarginRight, {
-      textAlign: "right",
-      textBaseline: "top",
-      font: this.options.grid.fontOptions.fontStyle,
-    });
+    // if 0 in canvas range
+    if (
+      ((vp[0] < 0 && vp[2] > 0) || (vp[0] > 0 && vp[2] < 0)) &&
+      ((vp[1] < 0 && vp[3] > 0) || (vp[1] > 0 && vp[3] < 0))
+    )
+      this.fillText("0", -xAxisTxtMarginTop, -yAxisTxtMarginRight, {
+        textAlign: "right",
+        textBaseline: "top",
+        font: this.options.grid.fontOptions.fontStyle,
+      });
   }
 
   /**
