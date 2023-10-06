@@ -25,6 +25,7 @@ body{
     -o-user-select:none
 }
 .grid-value{
+    width: fit-content;
     text-shadow: 1px 0 0 white, -1px 0 0 white,0 1px 0 white,0 -1px 0 white;
     z-index: 1;
 }

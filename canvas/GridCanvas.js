@@ -1,5 +1,7 @@
 const defaultGridCanvasOptions = {
-  ...defaultCanvasOptions,
+  canvas: {
+    ...defaultCanvasOptions,
+  },
   grid: {
     square: true,
     axis: {
@@ -16,10 +18,12 @@ const defaultGridCanvasOptions = {
     gridLines: {
       displayed: true,
       horiz: {
+        displayed: true,
         lineColor: "grey",
         lineWidth: 0.5,
       },
       verti: {
+        displayed: true,
         lineColor: "grey",
         lineWidth: 0.5,
       },
@@ -27,10 +31,12 @@ const defaultGridCanvasOptions = {
     subGridLines: {
       displayed: true,
       horiz: {
+        displayed: true,
         lineColor: "lightGrey",
         lineWidth: 0.5,
       },
       verti: {
+        displayed: true,
         lineColor: "lightGrey",
         lineWidth: 0.5,
       },
@@ -62,7 +68,11 @@ class GridCanvas extends MathCanvas {
    * @param [options] Options for canvas dimensions and grid rendering
    */
   constructor(parent, id, options = defaultGridCanvasOptions) {
-    super(parent, id, options);
+    // sets every non defined options to default
+    options = { ...defaultGridCanvasOptions, ...options };
+    console.log(options);
+    super(parent, id, options.canvas);
+    this.options = options;
 
     //sets plane to default plane ([0,0,canvas.width,canvas.height])
     this.setPlane();
@@ -206,6 +216,9 @@ class GridCanvas extends MathCanvas {
     let xSubgridInterval = this.#xStep / this.#xSubSections;
     let ySubgridInterval = this.#yStep / this.#ySubSections;
 
+    let gop = this.options.grid.gridLines;
+    let sop = this.options.grid.subGridLines;
+
     let { plane: vp } = this;
     if (!vp)
       throw new Error(
@@ -220,19 +233,24 @@ class GridCanvas extends MathCanvas {
       x < vp[2];
       x += this.#xStep
     ) {
-      this.drawLine(
-        [x, vp[1]],
-        [x, vp[3]],
-        this.options.grid.gridLines.verti.lineColor,
-        this.options.grid.gridLines.verti.lineWidth
-      );
-      if (this.options.grid.subGridLines.displayed)
-        for (let i = xSubgridInterval; i < this.#xStep; i += xSubgridInterval) {
+      if (gop.displayed && gop.verti.displayed)
+        this.drawLine(
+          [x, vp[1]],
+          [x, vp[3]],
+          gop.verti.lineColor,
+          gop.verti.lineWidth
+        );
+      if (sop.displayed && sop.verti.displayed)
+        for (
+          let i = gop.verti.displayed && gop.displayed ? xSubgridInterval : 0;
+          i < this.#xStep;
+          i += xSubgridInterval
+        ) {
           this.drawLine(
             [x + i, vp[1]],
             [x + i, vp[3]],
-            this.options.grid.subGridLines.verti.lineColor,
-            this.options.grid.subGridLines.verti.lineWidth
+            sop.verti.lineColor,
+            sop.verti.lineWidth
           );
         }
     }
@@ -243,19 +261,24 @@ class GridCanvas extends MathCanvas {
       y < vp[3];
       y += this.#yStep
     ) {
-      this.drawLine(
-        [vp[0], y],
-        [vp[2], y],
-        this.options.grid.gridLines.horiz.lineColor,
-        this.options.grid.gridLines.horiz.lineWidth
-      );
-      if (this.options.grid.subGridLines.displayed)
-        for (let i = ySubgridInterval; i < this.#yStep; i += ySubgridInterval) {
+      if (gop.displayed && gop.horiz.displayed)
+        this.drawLine(
+          [vp[0], y],
+          [vp[2], y],
+          gop.horiz.lineColor,
+          gop.horiz.lineWidth
+        );
+      if (sop.displayed && sop.horiz.displayed)
+        for (
+          let i = gop.horiz.displayed && gop.displayed ? ySubgridInterval : 0;
+          i < this.#yStep;
+          i += ySubgridInterval
+        ) {
           this.drawLine(
             [vp[0], y + i],
             [vp[2], y + i],
-            this.options.grid.subGridLines.verti.lineColor,
-            this.options.grid.subGridLines.verti.lineWidth
+            sop.verti.lineColor,
+            sop.verti.lineWidth
           );
         }
     }

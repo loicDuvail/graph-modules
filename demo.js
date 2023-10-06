@@ -1,10 +1,18 @@
 const canvasContainer = document.getElementById("parent");
 
-const grid = new GridCanvas(canvasContainer);
-// let plane = [-10, -2, 10, 2];
-grid.setPlane();
-grid.squarePlane();
-
+const grid = new GridCanvas(canvasContainer, null, {
+  canvas: {
+    setSizeToParent: false,
+    dims: {
+      initialWidth: canvasContainer.clientWidth - 50,
+      initialHeight: canvasContainer.clientHeight - 50,
+    },
+    left: "50px",
+  },
+});
+let plane = [-10, -2, 10, 2];
+grid.setPlane(plane);
+grid.squarePlane(false);
 const graph = new GraphCanvas(canvasContainer);
 
 let pow2 = (x) => x ** 2;
@@ -28,9 +36,9 @@ graph.setPlotColor("rgba(250,50,50,0.8)");
 graph.setValuesToPlot(values2);
 graph.setPlotStyle("towers");
 graph.setPlotColor("rgba(50,200,50,0.5)");
-graph.plot(true);
+// graph.plot(true);
 
 graph.setValuesToPlot(values);
 graph.setPlotColor("rgba(50,50,200,0.5)");
 graph.setPlotStyle("dot");
-graph.plot(true);
+// graph.plot(true);

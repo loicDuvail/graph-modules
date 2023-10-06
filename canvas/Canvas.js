@@ -4,6 +4,8 @@ const defaultCanvasOptions = {
     initialWidth: 100,
     initialHeight: 100,
   },
+  top: "0",
+  left: "0",
 };
 
 /**
@@ -37,6 +39,8 @@ class Canvas {
     this.canvas = document.createElement("canvas");
     this.canvas.id = id || UID("canvas");
     this.canvas.style.position = "absolute";
+    this.canvas.style.top = options.top;
+    this.canvas.style.left = options.left;
 
     this.parent = parent;
     this.parent.appendChild(this.canvas);
